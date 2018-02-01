@@ -1,2 +1,4 @@
-# test-duosystem
-Wanderlei dos Santos Caraça - Test - DuoSystem
+my_project
+==========
+
+A Symfony project created on February 1, 2018, 11:59 am.
