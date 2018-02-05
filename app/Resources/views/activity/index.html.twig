@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="col mb-2">
+        <div class="row">
+            <div class="col-sm-12  col-md-7">
+                <button class="btn btn-block btn-outline-success col-md-4 btn_new"
+                        data-toggle="modal" data-target="#modalEdit">Incluir nova atividade</button>
+            </div>
+            <div class="col-sm-12 col-md-5">
+                <form class="form-inline" action="{{ path('search') }}">
+                    <select class="form-control" name="find">
+                        <option value="2">Todos</option>
+                        <option value="1">Ativo</option>
+                        <option value="0">Inativo</option>
+                    </select>
+                    <select class="form-control" name="findStatus">
+                        <option value="0">Todos</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em desenvolvimento">Em desenvolvimento</option>
+                        <option value="Em teste">Em teste</option>
+                        <option value="Concluido">Concluido</option>
+                    </select>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        <i class="fas fa-search"></i> Buscar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Data início</th>
+                    <th>Data fim</th>
+                    <th>Situação</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for activity in activities %}
+                <tr {% if activity.status == "Concluído" %} class="table-danger" {% endif %} >
+                    <td>{{ activity.name }}</td>
+                    <td>
+                        <a href="#" data-toggle="tooltip" title="{{ activity.description }}">
+                        {{ activity.description|length > 30 ? activity.description|slice(0, 30) ~ '...' : activity.description }}
+                        </a>
+                    </td>
+                    <td>{{ activity.startDate|date('d/m/Y') }}</td>
+                    <td>{{ activity.endDate|date('d/m/Y') }}</td>
+                    <td>{{ activity.situation == true ? "Ativo" : "Inativo" }}</td>
+                    <td>{{ activity.status }}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn_edit" data-id='{{ activity.id }}'
+                                data-toggle="modal" data-target="#modalEdit"
+                                {% if activity.status == "Concluído" %} disabled data-toggle="tooltip" title="Essa atividade foi concluída e não pode ser alterada" {% endif %}>
+                            <i class="far fa-edit"></i> Editar</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="modalEdit" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> Editar</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('.btn_new').on('click', function () {
+                var url = Routing.generate('activity_new');
+                $('#modalEdit').modal({show: true});
+
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: url,
+                    dataType: "html",
+                    success: function (data) {
+                        $('#modalEdit .modal-body').html(data);
+                    }
+                });
+            });
+
+            $('.btn_edit').on('click', function () {
+                $('input[name="appbundle_activity[name]"]').val('');
+
+                var id = $(this).data('id');
+                var url = Routing.generate('activity_edit', { id: id });
+                $('#modalEdit').modal({show: true});
+
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: url,
+                    dataType: "html",
+                    success: function (data) {
+                        $('#modalEdit .modal-body').html(data);
+                    }
+                });
+            });
+
+            $('body').on('click','data-dismiss',function() {
+                $('#modalEdit').modal('hide').remove();
+            });
+        });
+    </script>
+{% endblock %}

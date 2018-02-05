@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="form-group">
+            {{ form_label(form.name, 'Nome', {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.name,  {'attr': {'placeholder':'Digite o nome da atividade', 'class':'form-control'}}) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ form_label(form.situation, 'Situação') }}
+            {{ form_widget(form.situation, {'attr': {'class':'form-control'}}) }}
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            {{ form_label(form.status, 'Status') }}
+            {{ form_widget(form.status, {'attr': {'class':'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ form_label(form.startDate, 'Data inicial', {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.startDate, {'attr': {'data-error':'Preencha com uma data inicial'}}) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            {{ form_label(form.endDate, 'Data final') }}
+            {{ form_widget(form.endDate) }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="form-group">
+            {{ form_label(form.description, 'Descrição', {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.description,  {'attr': {'class':'form-control', 'maxlength':600}}) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+</div>
